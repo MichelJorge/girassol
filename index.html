@@ -179,7 +179,7 @@
   <canvas id="vangogh-canvas"></canvas>
 
   <div class="message">
-    "Igual ao girassol busca a luz do sol,<br>meu mundo fica mais bonito com você." 🌻
+    "Eu estou sempre fazendo aquilo que não sou capaz,<br>numa tentativa de aprender como fazê-lo." 🌻
   </div>
 
   <div class="sunflower-container">
@@ -194,25 +194,29 @@
 
   <script>
     /* ================================================
-       GERADOR DE PÉTALAS REFORÇADO (20 Pétalas em Camadas)
-    ================================================ */
-    const petalsBox = document.getElementById('petals-box');
-    const totalPetals = 20; 
+   GERADOR DE PÉTALAS REFORÇADO (3 Camadas Volumosas)
+================================================ */
+const petalsBox = document.getElementById('petals-box');
+const totalPetals = 20; // 20 pétalas por camada = 60 pétalas no total!
 
-    // Cria duas camadas de pétalas para efeito 3D volumoso
-    for (let layer = 0; layer < 2; layer++) {
-      for (let i = 0; i < totalPetals; i++) {
-        const petal = document.createElement('div');
-        petal.classList.add('petal');
-        if (layer === 1) petal.classList.add('back-layer');
-        
-        // Desloca as pétalas de trás para intercalar com as da frente
-        const angle = (360 / totalPetals) * i + (layer * (360 / totalPetals) / 2);
-        
-        petal.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
-        petalsBox.appendChild(petal);
-      }
-    }
+for (let layer = 0; layer < 3; layer++) {
+  for (let i = 0; i < totalPetals; i++) {
+    const petal = document.createElement('div');
+    petal.classList.add('petal');
+    
+    // Identifica as camadas para o CSS aplicar tamanhos diferentes
+    if (layer === 1) petal.classList.add('mid-layer');
+    if (layer === 2) petal.classList.add('back-layer');
+    
+    // Intercala o ângulo de cada camada para que uma pétala não fique exatamente atrás da outra
+    // Camada 0: deslocamento 0 | Camada 1: deslocamento de metade do vão | Camada 2: deslocamento de um terço
+    const angleOffset = (360 / totalPetals) * (layer / 3);
+    const angle = (360 / totalPetals) * i + angleOffset;
+    
+    petal.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+    petalsBox.appendChild(petal);
+  }
+}
 
     /* ================================================
        CANVAS: FUNDO ANIMADO ESTILO VAN GOGH
