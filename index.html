@@ -12,7 +12,7 @@
     
     body {
       min-height: 100vh;
-      background: #0a1628; /* Azul noturno profundo */
+      background: #0a1628; 
       overflow: hidden;
       display: flex;
       justify-content: center;
@@ -20,7 +20,6 @@
       perspective: 1000px;
     }
 
-    /* Tela de pintura digital para os redemoinhos e estrelas */
     #vangogh-canvas {
       position: absolute;
       inset: 0;
@@ -29,11 +28,11 @@
       z-index: 1;
     }
 
-    /* CONTAINER DO GIRASSOL */
+    /* CONTAINER DO GIRASSOL AMPLIADO */
     .sunflower-container {
       position: relative;
-      width: 200px;
-      height: 450px;
+      width: 250px;
+      height: 550px; /* Aumentado para suportar o girassol maior */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -42,62 +41,57 @@
     }
 
     /* ================================================
-       1. CAULE & FOLHAS (SOMBRAS NATURAIS)
+       1. CAULE AMPLIADO
     ================================================ */
     .stem {
       position: absolute;
       bottom: 0;
-      width: 10px;
-      height: 300px;
-      /* Gradiente mais rico simulando luz e sombra */
+      width: 14px; /* Mais grosso para aguentar o peso da flor */
+      height: 380px; /* Mais alto */
       background: linear-gradient(to right, #1b4332 0%, #2d6a4f 40%, #52b788 100%);
-      border-radius: 5px;
+      border-radius: 7px;
       transform-origin: bottom center;
       transform: scaleY(0);
-      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.4);
+      box-shadow: -2px 0 12px rgba(0, 0, 0, 0.4);
       animation: growStem 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
     @keyframes growStem { to { transform: scaleY(1); } }
 
+    /* ================================================
+       2. ARRANJO DE MULTIPLAS FOLHAS (6 FOLHAS)
+    ================================================ */
     .leaf {
       position: absolute;
-      width: 45px;
-      height: 30px;
+      width: 55px; /* Folhas maiores */
+      height: 35px;
       background: linear-gradient(135deg, #2d6a4f, #1b4332);
-      border-radius: 0 25px 0 25px;
-      transform-origin: bottom left;
+      border-radius: 0 30px 0 30px;
       transform: scale(0);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.35);
     }
+
+    /* Configuração e tempo de broto para cada folha lateral */
+    .leaf.left-1 { left: -42px; bottom: 90px; transform-origin: bottom right; animation: growLeafLeft 1.2s 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .leaf.right-1 { right: -42px; bottom: 140px; transform-origin: bottom left; transform: scaleX(-1); animation: growLeafRight 1.2s 1.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     
-    .leaf.left {
-      left: -35px;
-      bottom: 120px;
-      transform: rotate(-25deg) scale(0);
-      animation: growLeafLeft 1.5s 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
+    .leaf.left-2 { left: -42px; bottom: 200px; transform-origin: bottom right; animation: growLeafLeft 1.2s 2.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .leaf.right-2 { right: -42px; bottom: 250px; transform-origin: bottom left; transform: scaleX(-1); animation: growLeafRight 1.2s 2.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    
+    .leaf.left-3 { left: -40px; bottom: 300px; width: 45px; height: 28px; transform-origin: bottom right; animation: growLeafLeft 1.2s 3.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .leaf.right-3 { right: -40px; bottom: 330px; width: 45px; height: 28px; transform-origin: bottom left; transform: scaleX(-1); animation: growLeafRight 1.2s 3.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-    .leaf.right {
-      right: -35px;
-      bottom: 170px;
-      background: linear-gradient(225deg, #40916c, #2d6a4f);
-      transform: rotate(25deg) scale(0) scaleX(-1);
-      transform-origin: bottom right;
-      animation: growLeafRight 1.5s 2.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-
-    @keyframes growLeafLeft { to { transform: rotate(-25deg) scale(1); } }
-    @keyframes growLeafRight { to { transform: rotate(25deg) scale(1) scaleX(-1); } }
+    @keyframes growLeafLeft { to { transform: rotate(-22deg) scale(1); } }
+    @keyframes growLeafRight { to { transform: rotate(22deg) scale(1) scaleX(-1); } }
 
     /* ================================================
-       2. CABEÇA DO GIRASSOL (20 PÉTALAS & PROFUNDIDADE)
+       3. CABEÇA DO GIRASSOL GIGANTE
     ================================================ */
     .flower-head {
       position: absolute;
-      bottom: 290px;
-      width: 140px;
-      height: 140px;
+      bottom: 365px; /* Alinhado ao novo topo do caule */
+      width: 180px;  /* Aumentado de 140px para 180px */
+      height: 180px; /* Aumentado de 140px para 180px */
       transform: scale(0) rotate(-45deg);
       transform-origin: center center;
       animation: popFlower 2.5s 3.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -105,62 +99,69 @@
 
     @keyframes popFlower { to { transform: scale(1) rotate(0deg); } }
 
-    /* Miolo realista com textura interna */
+    /* Miolo imponente e robusto */
     .center {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 65px;
-      height: 65px;
-      background: radial-gradient(circle, #271306 0%, #43281c 70%, #6f4e37 100%);
-      border: 2px solid #1a0f08;
+      width: 85px; /* Miolo maior e proporcional */
+      height: 85px;
+      background: radial-gradient(circle, #210f04 0%, #3a2218 65%, #5c3e29 100%);
+      border: 3px solid #140a04;
       border-radius: 50%;
       z-index: 10;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.85), 2px 4px 10px rgba(0,0,0,0.4);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 2px 4px 14px rgba(0,0,0,0.5);
     }
 
     .petals-container {
       position: relative;
       width: 100%;
       height: 100%;
-      animation: spinFlower 25s linear infinite 6.5s;
+      animation: spinFlower 28s linear infinite 6.5s;
     }
 
     @keyframes spinFlower { 100% { transform: rotate(360deg); } }
 
-    /* Pétalas estilo Van Gogh (Camadas com tons dourados) */
+    /* PÉTALAS MAIORES E MAIS LARGAS */
     .petal {
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 24px;
-      height: 65px;
-      /* Amarelo vibrante com degradê para o dourado quente e laranja na base */
-      background: linear-gradient(to top, #e65c00, #ff9f00, #ffcc00, #ffeb3b);
-      border-radius: 50% 50% 25% 25%;
-      box-shadow: 1px 3px 5px rgba(0,0,0,0.25);
+      width: 32px;  /* Mais largas para fechar os vãos */
+      height: 95px; /* Mais compridas */
+      background: linear-gradient(to top, #e65c00 0%, #ff9f00 25%, #ffcc00 60%, #ffeb3b 100%);
+      border-radius: 50% 50% 35% 35%;
+      box-shadow: 1px 3px 6px rgba(0,0,0,0.25);
       transform-origin: bottom center;
+      z-index: 3;
     }
 
-    /* Segunda camada de pétalas para dar volume */
+    .petal.mid-layer {
+      width: 34px;
+      height: 105px;
+      background: linear-gradient(to top, #d45000 0%, #ff9200 30%, #ffbb00 100%);
+      filter: brightness(0.92);
+      z-index: 2;
+    }
+
     .petal.back-layer {
-      height: 70px;
-      width: 22px;
-      background: linear-gradient(to top, #d45000, #e69500, #ffaa00);
-      filter: brightness(0.85);
-      z-index: -1;
+      width: 36px;
+      height: 115px;
+      background: linear-gradient(to top, #b83f00 0%, #e68500 40%, #ffa500 100%);
+      filter: brightness(0.78) drop-shadow(0px 4px 8px rgba(0,0,0,0.4));
+      z-index: 1;
     }
 
     /* ================================================
-       3. MENSAGEM DOURADA
+       4. MENSAGEM DOURADA
     ================================================ */
     .message {
       position: fixed;
-      top: 15%;
-      font-family: 'Georgia', serif; /* Fonte clássica combinando com arte */
+      top: 12%;
+      font-family: 'Georgia', serif;
       font-style: italic;
-      color: #ffcc00; /* Dourado quente */
+      color: #ffcc00;
       font-size: 1.6rem;
       text-align: center;
       text-shadow: 0 0 20px rgba(255, 159, 0, 0.7), 2px 2px 4px rgba(0,0,0,0.8);
@@ -179,7 +180,7 @@
   <canvas id="vangogh-canvas"></canvas>
 
   <div class="message">
-    "Eu estou sempre fazendo aquilo que não sou capaz,<br>numa tentativa de aprender como fazê-lo." 🌻
+    "Ache belo tudo que puder,<br>Vincent Van Gogh." 🌻
   </div>
 
   <div class="sunflower-container">
@@ -188,35 +189,38 @@
       <div class="petals-container" id="petals-box"></div>
     </div>
     <div class="stem"></div>
-    <div class="leaf left"></div>
-    <div class="leaf right"></div>
+    
+    <div class="leaf left-1"></div>
+    <div class="leaf right-1"></div>
+    <div class="leaf left-2"></div>
+    <div class="leaf right-2"></div>
+    <div class="leaf left-3"></div>
+    <div class="leaf right-3"></div>
   </div>
 
   <script>
     /* ================================================
-   GERADOR DE PÉTALAS REFORÇADO (3 Camadas Volumosas)
-================================================ */
-const petalsBox = document.getElementById('petals-box');
-const totalPetals = 20; // 20 pétalas por camada = 60 pétalas no total!
+       GERADOR DE PÉTALAS EM 3 CAMADAS (60 PÉTALAS)
+    ================================================ */
+    const petalsBox = document.getElementById('petals-box');
+    const totalPetals = 20; 
 
-for (let layer = 0; layer < 3; layer++) {
-  for (let i = 0; i < totalPetals; i++) {
-    const petal = document.createElement('div');
-    petal.classList.add('petal');
-    
-    // Identifica as camadas para o CSS aplicar tamanhos diferentes
-    if (layer === 1) petal.classList.add('mid-layer');
-    if (layer === 2) petal.classList.add('back-layer');
-    
-    // Intercala o ângulo de cada camada para que uma pétala não fique exatamente atrás da outra
-    // Camada 0: deslocamento 0 | Camada 1: deslocamento de metade do vão | Camada 2: deslocamento de um terço
-    const angleOffset = (360 / totalPetals) * (layer / 3);
-    const angle = (360 / totalPetals) * i + angleOffset;
-    
-    petal.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
-    petalsBox.appendChild(petal);
-  }
-}
+    for (let layer = 0; layer < 3; layer++) {
+      for (let i = 0; i < totalPetals; i++) {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        
+        if (layer === 1) petal.classList.add('mid-layer');
+        if (layer === 2) petal.classList.add('back-layer');
+        
+        // Intercala os ângulos perfeitamente entre as camadas
+        const angleOffset = (360 / totalPetals) * (layer / 3);
+        const angle = (360 / totalPetals) * i + angleOffset;
+        
+        petal.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+        petalsBox.appendChild(petal);
+      }
+    }
 
     /* ================================================
        CANVAS: FUNDO ANIMADO ESTILO VAN GOGH
@@ -234,7 +238,6 @@ for (let layer = 0; layer < 3; layer++) {
     window.addEventListener('resize', resize);
     resize();
 
-    // Configuração das Estrelas Pulsantes
     const starPositions = [
       {x: 0.15, y: 0.25, r: 25, baseR: 25, speed: 0.03},
       {x: 0.35, y: 0.15, r: 18, baseR: 18, speed: 0.02},
@@ -247,7 +250,6 @@ for (let layer = 0; layer < 3; layer++) {
       time += 0.01;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 1. Degradê de Fundo Texturizado (Pinceladas horizontais)
       let grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
       grad.addColorStop(0, '#060d1a');
       grad.addColorStop(0.5, '#122548');
@@ -255,7 +257,6 @@ for (let layer = 0; layer < 3; layer++) {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Efeito de pinceladas estáticas no fundo
       ctx.strokeStyle = 'rgba(26, 47, 94, 0.15)';
       ctx.lineWidth = 3;
       for (let i = 0; i < canvas.height; i += 8) {
@@ -265,7 +266,6 @@ for (let layer = 0; layer < 3; layer++) {
         ctx.stroke();
       }
 
-      // 2. Os Redemoinhos em Espiral Fluidos (Centro da Tela)
       ctx.lineWidth = 4;
       let centerX = canvas.width * 0.5;
       let centerY = canvas.height * 0.35;
@@ -273,21 +273,17 @@ for (let layer = 0; layer < 3; layer++) {
       function drawSwirl(cx, cy, scale, direction) {
         ctx.save();
         ctx.translate(cx, cy);
-        
-        // Pinceladas do redemoinho (Vários tons de azul e celeste)
         const colors = ['#1a3d7c', '#2a5eb2', '#4a8add', '#87bfff', '#ffeb3b'];
         
         colors.forEach((color, idx) => {
           ctx.strokeStyle = color;
-          // Altera a opacidade dinamicamente com base na cor
           ctx.globalAlpha = color === '#ffeb3b' ? 0.08 : 0.35; 
           
           ctx.beginPath();
           for (let angle = 0; angle < Math.PI * 4; angle += 0.05) {
-            // Equação da espiral de Arquimedes modificada pelo tempo
             let r = (angle * 12 * scale) + (idx * 4);
             let x = Math.cos(angle * direction + time + (idx * 0.1)) * r;
-            let y = Math.sin(angle * direction + time + (idx * 0.1)) * r * 0.6; // Espiral achatada
+            let y = Math.sin(angle * direction + time + (idx * 0.1)) * r * 0.6;
             
             if (angle === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
@@ -297,31 +293,26 @@ for (let layer = 0; layer < 3; layer++) {
         ctx.restore();
       }
 
-      // Renderiza o grande fluxo de vento central
       drawSwirl(centerX - 80, centerY, 1.2, 1);
       drawSwirl(centerX + 120, centerY - 20, 0.9, -1);
 
-      // 3. Estrelas com Auréola/Halo Irradiado
       starPositions.forEach(star => {
         let x = star.x * canvas.width;
         let y = star.y * canvas.height;
-        // Efeito pulsante suave
         let pulse = Math.sin(time * 50 * star.speed) * 4;
         let currentR = star.baseR + pulse;
 
-        // Desenha o Halo de luz (pinceladas radiais ao redor da estrela)
         ctx.save();
         ctx.globalAlpha = 0.25;
         ctx.strokeStyle = '#ffcc00';
         ctx.lineWidth = 2.5;
         for (let r = currentR + 5; r < currentR + 35; r += 8) {
-          ctx.setLineDash([4, 6]); // Linhas tracejadas simulando as pinceladas
+          ctx.setLineDash([4, 6]);
           ctx.beginPath();
           ctx.arc(x, y, r, 0, Math.PI * 2);
           ctx.stroke();
         }
         
-        // Núcleo brilhante da Estrela
         let starGrad = ctx.createRadialGradient(x, y, 2, x, y, currentR);
         starGrad.addColorStop(0, '#ffffff');
         starGrad.addColorStop(0.3, '#ffeb3b');
@@ -334,13 +325,11 @@ for (let layer = 0; layer < 3; layer++) {
         ctx.restore();
       });
 
-      // 4. A Grande Lua Crescente com Halo Dourado (Canto Superior Direito)
       let moonX = canvas.width * 0.85;
       let moonY = canvas.height * 0.18;
       let moonR = 45;
 
       ctx.save();
-      // Halo da lua
       ctx.globalAlpha = 0.15;
       let moonHalo = ctx.createRadialGradient(moonX, moonY, moonR, moonX, moonY, moonR + 50);
       moonHalo.addColorStop(0, '#ff9f00');
@@ -351,7 +340,6 @@ for (let layer = 0; layer < 3; layer++) {
       ctx.arc(moonX, moonY, moonR + 50, 0, Math.PI * 2);
       ctx.fill();
 
-      // Desenho do corte da lua crescente perfeita
       ctx.globalAlpha = 1;
       ctx.shadowColor = '#ffcc00';
       ctx.shadowBlur = 20;
@@ -360,7 +348,6 @@ for (let layer = 0; layer < 3; layer++) {
       ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
       ctx.fill();
       
-      // Sombra para recortar a lua e torná-la minguante/crescente
       ctx.shadowBlur = 0;
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
@@ -371,7 +358,6 @@ for (let layer = 0; layer < 3; layer++) {
       animationFrameId = requestAnimationFrame(drawVanGoghBackground);
     }
 
-    // Inicia o loop da pintura animada
     drawVanGoghBackground();
   </script>
 </body>
