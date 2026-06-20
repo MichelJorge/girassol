@@ -1,364 +1,512 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌻 Um Girassol sob a Noite Estrelada</title>
-  <style>
-    /* ================================================
-       RESET & VAN GOGH BASE
-    ================================================ */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      min-height: 100vh;
-      background: #0a1628; 
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      perspective: 1000px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girassóis — Releitura Animada de Van Gogh</title>
+<meta name="description" content="Uma releitura animada e generativa de 'Vaso com Girassóis', de Vincent van Gogh, feita em SVG e CSS puro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- paleta nomeada ---- */
+    --wall-light:   #E9BA21;
+    --wall-dark:    #C9941A;
+    --table-ochre:  #B07A24;
+    --table-dark:   #8F5E18;
+    --petal-bright: #FBD23A;
+    --petal-mid:    #ECA916;
+    --petal-shadow: #C97C0E;
+    --petal-highlight: #FFEC9C;
+    --leaf-green:   #707F28;
+    --leaf-dark:    #46531B;
+    --vase-yellow:  #D9A441;
+    --vase-shadow:  #A8741F;
+    --seed-brown:   #5A3A1A;
+    --seed-dark:    #2E1C0D;
+    --frame-1:      #FFE08A;
+    --frame-2:      #B8860B;
+    --frame-3:      #5C3D0E;
+    --gallery-1:    #241512;
+    --gallery-2:    #120a08;
+    --ink:          #3a2a16;
+    --ink-soft:     #6b5a3e;
+    --paper:        #f4ead2;
+  }
 
-    #vangogh-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
+  *{ box-sizing: border-box; }
 
-    /* CONTAINER DO GIRASSOL AMPLIADO */
-    .sunflower-container {
-      position: relative;
-      width: 250px;
-      height: 550px; /* Aumentado para suportar o girassol maior */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 2;
-      bottom: 20px;
-    }
+  html,body{
+    margin:0; padding:0; min-height:100%;
+    background:
+      radial-gradient(ellipse at 50% 15%, #3a241e 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 100%, var(--gallery-2) 0%, transparent 70%),
+      linear-gradient(180deg, var(--gallery-1), var(--gallery-2));
+    background-size: 140% 140%, 140% 140%, 100% 100%;
+    animation: galleryDrift 36s ease-in-out infinite alternate;
+    font-family: 'EB Garamond', serif;
+    color: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
 
-    /* ================================================
-       1. CAULE AMPLIADO
-    ================================================ */
-    .stem {
-      position: absolute;
-      bottom: 0;
-      width: 14px; /* Mais grosso para aguentar o peso da flor */
-      height: 380px; /* Mais alto */
-      background: linear-gradient(to right, #1b4332 0%, #2d6a4f 40%, #52b788 100%);
-      border-radius: 7px;
-      transform-origin: bottom center;
-      transform: scaleY(0);
-      box-shadow: -2px 0 12px rgba(0, 0, 0, 0.4);
-      animation: growStem 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
+  @keyframes galleryDrift{
+    0%   { background-position: 40% 0%, 60% 100%, 0 0; }
+    100% { background-position: 60% 10%, 40% 90%, 0 0; }
+  }
 
-    @keyframes growStem { to { transform: scaleY(1); } }
+  .stage{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap: clamp(20px, 4vw, 40px);
+    padding: clamp(24px, 6vw, 64px) 18px 50px;
+  }
 
-    /* ================================================
-       2. ARRANJO DE MULTIPLAS FOLHAS (6 FOLHAS)
-    ================================================ */
-    .leaf {
-      position: absolute;
-      width: 55px; /* Folhas maiores */
-      height: 35px;
-      background: linear-gradient(135deg, #2d6a4f, #1b4332);
-      border-radius: 0 30px 0 30px;
-      transform: scale(0);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.35);
-    }
+  /* ---------- moldura dourada ---------- */
+  .frame-wrap{
+    position:relative;
+    width:min(560px, 92vw);
+    padding: clamp(14px, 2.6vw, 22px);
+    border-radius: 3px;
+    background:
+      repeating-linear-gradient(135deg, rgba(0,0,0,.18) 0 2px, transparent 2px 6px),
+      linear-gradient(135deg, var(--frame-1), var(--frame-2) 38%, var(--frame-3) 68%, var(--frame-2) 100%);
+    box-shadow:
+      0 0 0 2px rgba(0,0,0,.55) inset,
+      0 0 0 9px rgba(0,0,0,.18) inset,
+      0 30px 70px -15px rgba(0,0,0,.75),
+      0 4px 10px rgba(0,0,0,.5);
+    transform-style: preserve-3d;
+    transform: perspective(1100px) rotateX(0deg) rotateY(0deg);
+    transition: transform .25s cubic-bezier(.2,.6,.3,1);
+    will-change: transform;
+  }
 
-    /* Configuração e tempo de broto para cada folha lateral */
-    .leaf.left-1 { left: -42px; bottom: 90px; transform-origin: bottom right; animation: growLeafLeft 1.2s 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    .leaf.right-1 { right: -42px; bottom: 140px; transform-origin: bottom left; transform: scaleX(-1); animation: growLeafRight 1.2s 1.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    
-    .leaf.left-2 { left: -42px; bottom: 200px; transform-origin: bottom right; animation: growLeafLeft 1.2s 2.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    .leaf.right-2 { right: -42px; bottom: 250px; transform-origin: bottom left; transform: scaleX(-1); animation: growLeafRight 1.2s 2.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    
-    .leaf.left-3 { left: -40px; bottom: 300px; width: 45px; height: 28px; transform-origin: bottom right; animation: growLeafLeft 1.2s 3.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    .leaf.right-3 { right: -40px; bottom: 330px; width: 45px; height: 28px; transform-origin: bottom left; transform: scaleX(-1); animation: growLeafRight 1.2s 3.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+  .frame-inner{
+    position:relative;
+    background:#0c0a08;
+    padding: clamp(5px, 1vw, 8px);
+    box-shadow: inset 0 0 26px rgba(0,0,0,.75);
+    overflow:hidden;
+  }
 
-    @keyframes growLeafLeft { to { transform: rotate(-22deg) scale(1); } }
-    @keyframes growLeafRight { to { transform: rotate(22deg) scale(1) scaleX(-1); } }
+  svg.painting{
+    display:block;
+    width:100%;
+    height:auto;
+    background: var(--wall-light);
+    opacity:0;
+    transition: opacity .5s ease;
+  }
 
-    /* ================================================
-       3. CABEÇA DO GIRASSOL GIGANTE
-    ================================================ */
-    .flower-head {
-      position: absolute;
-      bottom: 365px; /* Alinhado ao novo topo do caule */
-      width: 180px;  /* Aumentado de 140px para 180px */
-      height: 180px; /* Aumentado de 140px para 180px */
-      transform: scale(0) rotate(-45deg);
-      transform-origin: center center;
-      animation: popFlower 2.5s 3.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
+  /* sheen / holofote que segue o mouse, como luz batendo na tinta */
+  .sheen{
+    position:absolute; inset: clamp(5px,1vw,8px);
+    pointer-events:none;
+    background: radial-gradient(circle at var(--mx,50%) var(--my,30%),
+      rgba(255,255,255,.35), rgba(255,255,255,.08) 28%, transparent 55%);
+    mix-blend-mode: soft-light;
+    opacity:.9;
+  }
 
-    @keyframes popFlower { to { transform: scale(1) rotate(0deg); } }
+  /* poeira / pólen flutuando à frente da tela */
+  .motes{ position:absolute; inset: clamp(5px,1vw,8px); pointer-events:none; overflow:hidden; }
+  .mote{
+    position:absolute;
+    bottom:-6%;
+    width: var(--s,4px); height: var(--s,4px);
+    border-radius:50%;
+    background: radial-gradient(circle, #fff6cf 0%, rgba(255,246,207,0) 70%);
+    opacity:0;
+    animation: floatUp var(--dur,9s) linear infinite;
+    animation-delay: var(--delay,0s);
+  }
+  @keyframes floatUp{
+    0%   { transform: translate(0,0); opacity:0; }
+    8%   { opacity:.85; }
+    90%  { opacity:.35; }
+    100% { transform: translate(var(--drift,18px), -118%); opacity:0; }
+  }
 
-    /* Miolo imponente e robusto */
-    .center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 85px; /* Miolo maior e proporcional */
-      height: 85px;
-      background: radial-gradient(circle, #210f04 0%, #3a2218 65%, #5c3e29 100%);
-      border: 3px solid #140a04;
-      border-radius: 50%;
-      z-index: 10;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 2px 4px 14px rgba(0,0,0,0.5);
-    }
+  /* ---------- flores: balanço suave, sem conflitar com posicionamento estático ---------- */
+  .flower-sway{
+    transform-origin: 0 0;
+    animation: swayBob var(--dur,6s) ease-in-out infinite alternate;
+    animation-delay: var(--swayDelay,0s);
+  }
+  @keyframes swayBob{
+    0%   { rotate: -1.4deg; translate: 0 0; }
+    50%  { rotate: .6deg;  translate: 0 -2.4px; }
+    100% { rotate: 1.6deg;  translate: 0 .6px; }
+  }
 
-    .petals-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      animation: spinFlower 28s linear infinite 6.5s;
-    }
+  .petal{
+    opacity:0;
+    animation: petalIn .85s cubic-bezier(.2,.7,.3,1) forwards;
+    animation-delay: calc(var(--baseDelay,0s) + var(--pd,0s));
+  }
+  @keyframes petalIn{
+    from{ opacity:0; }
+    to{ opacity:1; }
+  }
 
-    @keyframes spinFlower { 100% { transform: rotate(360deg); } }
+  .disc-group{
+    opacity:0;
+    animation: petalIn 1s ease-out forwards;
+    animation-delay: calc(var(--baseDelay,0s) + .25s);
+  }
 
-    /* PÉTALAS MAIORES E MAIS LARGAS */
-    .petal {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 32px;  /* Mais largas para fechar os vãos */
-      height: 95px; /* Mais compridas */
-      background: linear-gradient(to top, #e65c00 0%, #ff9f00 25%, #ffcc00 60%, #ffeb3b 100%);
-      border-radius: 50% 50% 35% 35%;
-      box-shadow: 1px 3px 6px rgba(0,0,0,0.25);
-      transform-origin: bottom center;
-      z-index: 3;
-    }
+  .draw{ fill-opacity: 0; }
+  .draw.filled{ transition: fill-opacity .9s ease .15s; fill-opacity:1; }
 
-    .petal.mid-layer {
-      width: 34px;
-      height: 105px;
-      background: linear-gradient(to top, #d45000 0%, #ff9200 30%, #ffbb00 100%);
-      filter: brightness(0.92);
-      z-index: 2;
-    }
+  @media (prefers-reduced-motion: reduce){
+    .flower-sway{ animation:none !important; }
+    .petal,.disc-group{ animation:none !important; opacity:1 !important; }
+    html,body{ animation:none !important; }
+  }
 
-    .petal.back-layer {
-      width: 36px;
-      height: 115px;
-      background: linear-gradient(to top, #b83f00 0%, #e68500 40%, #ffa500 100%);
-      filter: brightness(0.78) drop-shadow(0px 4px 8px rgba(0,0,0,0.4));
-      z-index: 1;
-    }
+  /* ---------- legenda no estilo placa de museu ---------- */
+  .placard{
+    width:min(560px, 92vw);
+    text-align:center;
+    padding: 4px 6px 0;
+  }
+  .placard .eyebrow{
+    font-family:'EB Garamond', serif;
+    font-style: italic;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size: .72rem;
+    color: var(--frame-1);
+    opacity:.75;
+    margin:0 0 6px;
+  }
+  .placard h1{
+    font-family:'Playfair Display', serif;
+    font-weight:900;
+    font-style:italic;
+    font-size: clamp(2.1rem, 7vw, 3.1rem);
+    margin: 0 0 10px;
+    color: var(--paper);
+    text-shadow: 0 2px 18px rgba(236,169,22,.25);
+  }
+  .placard .meta{
+    font-size: .98rem;
+    line-height:1.5;
+    color: #d8c8a8;
+    margin: 0 0 10px;
+  }
+  .placard .meta em{ color: var(--frame-1); font-style:italic; }
+  .placard .note{
+    font-family:'Caveat', cursive;
+    font-size: 1.25rem;
+    color: #c9b287;
+    opacity:.85;
+    margin: 0;
+  }
 
-    /* ================================================
-       4. MENSAGEM DOURADA
-    ================================================ */
-    .message {
-      position: fixed;
-      top: 12%;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      color: #ffcc00;
-      font-size: 1.6rem;
-      text-align: center;
-      text-shadow: 0 0 20px rgba(255, 159, 0, 0.7), 2px 2px 4px rgba(0,0,0,0.8);
-      opacity: 0;
-      transform: translateY(-20px);
-      animation: showMessage 2.5s 5.5s forwards;
-      padding: 0 20px;
-      z-index: 5;
-    }
+  noscript .ns-box{
+    width:min(560px,92vw); text-align:center; padding:40px 20px;
+    border:1px dashed var(--frame-1); border-radius:6px; color:var(--paper);
+  }
 
-    @keyframes showMessage { to { opacity: 1; transform: translateY(0); } }
-  </style>
+  @media (max-width: 420px){
+    .frame-wrap{ padding:12px; }
+  }
+</style>
 </head>
 <body>
 
-  <canvas id="vangogh-canvas"></canvas>
+<div class="stage">
 
-  <div class="message">
-    "Ache belo tudo que puder,<br><i>VG</i>." 🌻
-  </div>
-
-  <div class="sunflower-container">
-    <div class="flower-head">
-      <div class="center"></div>
-      <div class="petals-container" id="petals-box"></div>
+  <div class="frame-wrap" id="frameWrap">
+    <div class="frame-inner">
+      <svg class="painting" id="painting" viewBox="0 0 760 980" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pintura animada de um vaso com girassóis, inspirada em Vincent van Gogh"></svg>
+      <div class="sheen" id="sheen"></div>
+      <div class="motes" id="motes"></div>
     </div>
-    <div class="stem"></div>
-    
-    <div class="leaf left-1"></div>
-    <div class="leaf right-1"></div>
-    <div class="leaf left-2"></div>
-    <div class="leaf right-2"></div>
-    <div class="leaf left-3"></div>
-    <div class="leaf right-3"></div>
   </div>
 
-  <script>
-    /* ================================================
-       GERADOR DE PÉTALAS EM 3 CAMADAS (60 PÉTALAS)
-    ================================================ */
-    const petalsBox = document.getElementById('petals-box');
-    const totalPetals = 20; 
+  <div class="placard">
+    <p class="eyebrow">Galeria Digital · Pós-Impressionismo</p>
+    <h1>Girassóis</h1>
+    <p class="meta">Releitura animada inspirada em <em>Vaso com Girassóis</em>, Vincent van Gogh, 1888 · pintura original a óleo sobre tela · esta versão: SVG generativo + CSS, 2026</p>
+    <p class="note">a cada recarregamento nasce um buquê levemente diferente — passe o mouse sobre a tela para sentir a luz da galeria</p>
+  </div>
 
-    for (let layer = 0; layer < 3; layer++) {
-      for (let i = 0; i < totalPetals; i++) {
-        const petal = document.createElement('div');
-        petal.classList.add('petal');
-        
-        if (layer === 1) petal.classList.add('mid-layer');
-        if (layer === 2) petal.classList.add('back-layer');
-        
-        // Intercala os ângulos perfeitamente entre as camadas
-        const angleOffset = (360 / totalPetals) * (layer / 3);
-        const angle = (360 / totalPetals) * i + angleOffset;
-        
-        petal.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
-        petalsBox.appendChild(petal);
+  <noscript>
+    <div class="ns-box">Ative o JavaScript para ver a pintura animada dos girassóis.</div>
+  </noscript>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("painting");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function rand(a,b){ return Math.random()*(b-a)+a; }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function el(tag, attrs, parent){
+    const e = document.createElementNS(SVGNS, tag);
+    for(const k in attrs){ e.setAttribute(k, attrs[k]); }
+    if(parent) parent.appendChild(e);
+    return e;
+  }
+
+  // ---------- defs: gradientes e textura de tela ----------
+  const defs = el("defs", {}, svg);
+
+  const wallGrad = el("linearGradient", {id:"wallGrad", x1:"0", y1:"0", x2:"0", y2:"1"}, defs);
+  el("stop", {offset:"0%", "stop-color":"var(--wall-light)"}, wallGrad);
+  el("stop", {offset:"100%", "stop-color":"var(--wall-dark)"}, wallGrad);
+
+  const tableGrad = el("linearGradient", {id:"tableGrad", x1:"0", y1:"0", x2:"0", y2:"1"}, defs);
+  el("stop", {offset:"0%", "stop-color":"var(--table-ochre)"}, tableGrad);
+  el("stop", {offset:"100%", "stop-color":"var(--table-dark)"}, tableGrad);
+
+  const vaseGrad = el("linearGradient", {id:"vaseGrad", x1:"0", y1:"0", x2:"1", y2:"0"}, defs);
+  el("stop", {offset:"0%", "stop-color":"var(--vase-shadow)"}, vaseGrad);
+  el("stop", {offset:"45%", "stop-color":"var(--vase-yellow)"}, vaseGrad);
+  el("stop", {offset:"100%", "stop-color":"var(--vase-shadow)"}, vaseGrad);
+
+  const discGrad = el("radialGradient", {id:"discGrad", cx:"38%", cy:"35%", r:"75%"}, defs);
+  el("stop", {offset:"0%", "stop-color":"var(--seed-brown)"}, discGrad);
+  el("stop", {offset:"100%", "stop-color":"var(--seed-dark)"}, discGrad);
+
+  // textura de ruído (grão de tela / impasto)
+  const filt = el("filter", {id:"grain", x:"-5%", y:"-5%", width:"110%", height:"110%"}, defs);
+  el("feTurbulence", {type:"fractalNoise", baseFrequency:"0.85", numOctaves:"2", stitchTiles:"stitch", result:"noise"}, filt);
+  el("feColorMatrix", {in:"noise", type:"matrix", values:"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"}, filt);
+
+  // ---------- fundo: parede + mesa, com pinceladas direcionais ----------
+  el("rect", {x:0,y:0,width:760,height:660,fill:"url(#wallGrad)"}, svg);
+  el("rect", {x:0,y:650,width:760,height:330,fill:"url(#tableGrad)"}, svg);
+
+  (function brushStreaks(){
+    const wallShades = ["#F2C53B","#E9BA21","#D9A920","#C9941A","#F6CE55"];
+    for(let i=0;i<46;i++){
+      const x = rand(-10,770);
+      const h = rand(120,420);
+      const y = rand(0,640-h*0.3);
+      const wob = rand(8,28);
+      const d = `M${x},${y} C${x+wob},${y+h*0.3} ${x-wob},${y+h*0.6} ${x+wob*0.4},${y+h}`;
+      el("path",{d, stroke:pick(wallShades), "stroke-width":rand(3,7), fill:"none",
+        opacity:rand(.12,.3), "stroke-linecap":"round"}, svg);
+    }
+    const tableShades = ["#C68B2A","#B07A24","#9C6A1C","#8F5E18"];
+    for(let i=0;i<26;i++){
+      const x = rand(-10,770);
+      const y = rand(660,960);
+      const len = rand(60,180);
+      const d = `M${x},${y} q${len*0.5},${rand(-10,10)} ${len},${rand(-6,6)}`;
+      el("path",{d, stroke:pick(tableShades), "stroke-width":rand(3,6), fill:"none",
+        opacity:rand(.15,.32), "stroke-linecap":"round"}, svg);
+    }
+  })();
+
+  // linha da mesa
+  el("path",{d:"M0,652 Q380,640 760,652", stroke:"#7a5012","stroke-width":3, fill:"none", opacity:.55}, svg);
+
+  // ---------- vaso ----------
+  const vaseGroup = el("g",{}, svg);
+  const vasePath = el("path",{
+    d:"M306,613 C296,646 282,668 288,702 C293,742 298,784 318,824 C330,846 432,846 444,824 \
+       C462,784 467,742 472,702 C478,668 464,646 454,613 C422,602 338,602 306,613 Z",
+    fill:"url(#vaseGrad)", stroke:"#7a5012", "stroke-width":4, class:"draw"
+  }, vaseGroup);
+
+  el("ellipse",{cx:380, cy:613, rx:74, ry:13, fill:"var(--vase-shadow)", stroke:"#7a5012","stroke-width":3}, vaseGroup);
+  el("ellipse",{cx:380, cy:611, rx:60, ry:8, fill:"#3a2410", opacity:.55}, vaseGroup);
+
+  [ -34,-10,16,40 ].forEach((off,i)=>{
+    el("path",{
+      d:`M${340+off*1.1},620 C${330+off},680 ${330+off},760 ${346+off},822`,
+      stroke: i%2? "rgba(255,255,255,.18)":"rgba(0,0,0,.18)",
+      "stroke-width": 3, fill:"none"
+    }, vaseGroup);
+  });
+
+  el("text",{x:380, y:760, "text-anchor":"middle", "font-family":"Caveat, cursive",
+    "font-size":30, fill:"#6b4513", opacity:.5, transform:"rotate(-2 380 760)"}, vaseGroup).textContent = "Vincent";
+
+  // ---------- folhas junto à boca do vaso ----------
+  const leafGroup = el("g",{}, svg);
+  function leafPath(len,w){
+    return `M0,0 C${w},${-len*0.18} ${w*1.05},${-len*0.58} 0,${-len} \
+            C${-w*0.55},${-len*0.58} ${-w*0.32},${-len*0.18} 0,0 Z`;
+  }
+  const leafSpecs = [
+    {x:316,y:606,rot:-130,s:1.05},
+    {x:380,y:602,rot:-90,s:.85},
+    {x:444,y:606,rot:-50,s:1.05},
+  ];
+  leafSpecs.forEach(L=>{
+    const g = el("g",{transform:`translate(${L.x},${L.y}) rotate(${L.rot}) scale(${L.s})`}, leafGroup);
+    el("path",{d:leafPath(70,26), fill:"var(--leaf-green)", stroke:"var(--leaf-dark)","stroke-width":2.4, class:"draw"}, g);
+    el("path",{d:`M0,-4 L0,${-66}`, stroke:"var(--leaf-dark)","stroke-width":1.6, opacity:.6}, g);
+  });
+
+  // ---------- pétalas, disco de sementes ----------
+  function petalPath(len,w){
+    const w2 = len*w;
+    return `M0,0 C${-w2},${-len*0.28} ${-w2*0.55},${-len*0.82} 0,${-len} \
+            C${w2*0.55},${-len*0.82} ${w2},${-len*0.28} 0,0 Z`;
+  }
+  function petalRing(group, count, innerR, len, w, fill, stroke, rotOffset, layerName, baseDelay){
+    for(let i=0;i<count;i++){
+      const angle = (360/count)*i + rotOffset + rand(-3,3);
+      const L = len*rand(.92,1.08);
+      const p = el("path",{
+        d: petalPath(L,w),
+        transform:`rotate(${angle}) translate(0,${-innerR})`,
+        fill, stroke, "stroke-width":1.5, "stroke-linejoin":"round",
+        class:`petal ${layerName}`
+      }, group);
+      p.style.setProperty("--pd", (rand(0,0.5)).toFixed(2)+"s");
+      p.style.setProperty("--baseDelay", baseDelay+"s");
+    }
+  }
+  function seedDisc(group, r, detailed, baseDelay){
+    const dg = el("g",{class:"disc-group"}, group);
+    dg.style.setProperty("--baseDelay", baseDelay+"s");
+    el("circle",{cx:0,cy:0,r:r, fill:"url(#discGrad)"}, dg);
+    if(detailed){
+      const n = Math.min(Math.floor(r*r*0.95), 130);
+      for(let i=0;i<n;i++){
+        const a = i*137.508*Math.PI/180;
+        const rad = 2.3*Math.sqrt(i);
+        if(rad > r-2) break;
+        const x = rad*Math.cos(a), y = rad*Math.sin(a);
+        el("circle",{cx:x.toFixed(1),cy:y.toFixed(1),r:1.1,
+          fill: i%5===0? "#3a2410":"#5a3a1a", opacity:.85}, dg);
+      }
+    } else {
+      for(let i=0;i<10;i++){
+        const a = rand(0,Math.PI*2), rad = rand(r*0.2,r*0.85);
+        el("circle",{cx:(rad*Math.cos(a)).toFixed(1), cy:(rad*Math.sin(a)).toFixed(1),
+          r:1.2, fill:"#3a2410", opacity:.7}, dg);
       }
     }
+    el("circle",{cx:0,cy:0,r:r, fill:"none", stroke:"#3a2410","stroke-width":2, opacity:.5}, dg);
+  }
 
-    /* ================================================
-       CANVAS: FUNDO ANIMADO ESTILO VAN GOGH
-    ================================================ */
-    const canvas = document.getElementById('vangogh-canvas');
-    const ctx = canvas.getContext('2d');
+  function buildFlower(cx, cy, scale, rotation, droop, idx, detailed){
+    const baseDelay = 1.5 + idx*0.26;
+    const outer = el("g",{
+      transform:`translate(${cx},${cy}) rotate(${rotation}) scale(${scale})`
+    }, svg);
+    const sway = el("g",{class:"flower-sway"}, outer);
+    sway.style.setProperty("--dur", rand(5,8).toFixed(2)+"s");
+    sway.style.setProperty("--swayDelay", rand(0,3).toFixed(2)+"s");
 
-    let animationFrameId;
-    let time = 0;
+    const petalFill1 = droop? "#B5740E" : "var(--petal-shadow)";
+    const petalFill2 = droop? "#C98F1E" : "var(--petal-mid)";
+    const petalFill3 = droop? "#D9A93A" : "var(--petal-bright)";
 
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    petalRing(sway, 13, 18, 46, .34, petalFill1, petalFill2, rand(0,360), "outer", baseDelay);
+    petalRing(sway, 13, 14, 36, .32, petalFill2, petalFill3, rand(0,360), "mid", baseDelay);
+    petalRing(sway, 8,  9,  22, .36, petalFill3, "#FFE98A", rand(0,360), "inner", baseDelay);
+    seedDisc(sway, droop? 14:16, detailed, baseDelay);
+
+    return {cx, cy};
+  }
+
+  // ---------- disposição do buquê (fundo -> frente) ----------
+  const flowerSpecs = [
+    {cx:236, cy:472, scale:.74, rot:-34, droop:true,  detailed:false},
+    {cx:524, cy:452, scale:.72, rot:30,  droop:true,  detailed:false},
+    {cx:340, cy:568, scale:.66, rot:-22, droop:false, detailed:false},
+    {cx:432, cy:576, scale:.64, rot:20,  droop:false, detailed:false},
+    {cx:300, cy:518, scale:1.02,rot:-7,  droop:false, detailed:true},
+    {cx:462, cy:498, scale:.98, rot:9,   droop:false, detailed:true},
+    {cx:382, cy:426, scale:1.12,rot:0,   droop:false, detailed:true},
+  ];
+
+  // hastes ligando o buquê ao vaso (desenhadas ANTES das flores, para ficarem por baixo)
+  const stemGroup = el("g",{}, svg);
+  const stemAnchors = [310,346,380,414,450];
+  flowerSpecs.forEach((f,i)=>{
+    const ax = stemAnchors[i % stemAnchors.length] + rand(-6,6);
+    const ay = 612;
+    const tx = f.cx, ty = f.cy + 30*f.scale;
+    const mx = (ax+tx)/2 + rand(-22,22);
+    const my = (ay+ty)/2;
+    const d = `M${ax},${ay} Q${mx},${my} ${tx},${ty}`;
+    el("path",{d, stroke:"var(--leaf-dark)","stroke-width":7, fill:"none",
+      "stroke-linecap":"round", class:"draw"}, stemGroup);
+    el("path",{d, stroke:"var(--leaf-green)","stroke-width":2.4, fill:"none",
+      "stroke-linecap":"round", opacity:.7}, stemGroup);
+  });
+
+  // flores (desenhadas por último, para ficarem por cima das hastes)
+  flowerSpecs.forEach((f,i)=>{
+    buildFlower(f.cx,f.cy,f.scale,f.rot,f.droop,i,f.detailed);
+  });
+
+  // véu de textura por cima de tudo
+  el("rect",{x:0,y:0,width:760,height:980, filter:"url(#grain)", opacity:.5,
+    style:"mix-blend-mode:multiply; pointer-events:none;"}, svg);
+
+  // ---------- sequência de "pintura" no carregamento ----------
+  function drawIn(path, delay){
+    if(reduced){ path.style.fillOpacity = 1; return; }
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    path.getBoundingClientRect();
+    path.style.transition = `stroke-dashoffset 1s cubic-bezier(.65,0,.35,1) ${delay}s, fill-opacity .9s ease ${delay+0.5}s`;
+    requestAnimationFrame(()=>{
+      path.style.strokeDashoffset = 0;
+      path.classList.add("filled");
+    });
+  }
+
+  drawIn(vasePath, 0);
+  Array.from(leafGroup.querySelectorAll(".draw")).forEach((p,i)=>drawIn(p, .35+i*.18));
+  Array.from(stemGroup.querySelectorAll(".draw")).forEach((p,i)=>drawIn(p, .8+i*.14));
+
+  requestAnimationFrame(()=>{ svg.style.opacity = 1; });
+
+  // ---------- poeira / pólen flutuando ----------
+  if(!reduced){
+    const motesEl = document.getElementById("motes");
+    for(let i=0;i<14;i++){
+      const m = document.createElement("div");
+      m.className = "mote";
+      m.style.left = rand(8,92)+"%";
+      m.style.setProperty("--s", rand(2,5).toFixed(1)+"px");
+      m.style.setProperty("--dur", rand(7,15).toFixed(1)+"s");
+      m.style.setProperty("--delay", rand(0,12).toFixed(1)+"s");
+      m.style.setProperty("--drift", rand(-26,26).toFixed(0)+"px");
+      motesEl.appendChild(m);
     }
-    window.addEventListener('resize', resize);
-    resize();
+  }
 
-    const starPositions = [
-      {x: 0.15, y: 0.25, r: 25, baseR: 25, speed: 0.03},
-      {x: 0.35, y: 0.15, r: 18, baseR: 18, speed: 0.02},
-      {x: 0.75, y: 0.30, r: 22, baseR: 22, speed: 0.04},
-      {x: 0.90, y: 0.45, r: 15, baseR: 15, speed: 0.025},
-      {x: 0.55, y: 0.40, r: 12, baseR: 12, speed: 0.035}
-    ];
-
-    function drawVanGoghBackground() {
-      time += 0.01;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      let grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, '#060d1a');
-      grad.addColorStop(0.5, '#122548');
-      grad.addColorStop(1, '#1e122a');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.strokeStyle = 'rgba(26, 47, 94, 0.15)';
-      ctx.lineWidth = 3;
-      for (let i = 0; i < canvas.height; i += 8) {
-        ctx.beginPath();
-        ctx.moveTo(0, i + Math.sin(i) * 5);
-        ctx.lineTo(canvas.width, i + Math.cos(i) * 5);
-        ctx.stroke();
-      }
-
-      ctx.lineWidth = 4;
-      let centerX = canvas.width * 0.5;
-      let centerY = canvas.height * 0.35;
-      
-      function drawSwirl(cx, cy, scale, direction) {
-        ctx.save();
-        ctx.translate(cx, cy);
-        const colors = ['#1a3d7c', '#2a5eb2', '#4a8add', '#87bfff', '#ffeb3b'];
-        
-        colors.forEach((color, idx) => {
-          ctx.strokeStyle = color;
-          ctx.globalAlpha = color === '#ffeb3b' ? 0.08 : 0.35; 
-          
-          ctx.beginPath();
-          for (let angle = 0; angle < Math.PI * 4; angle += 0.05) {
-            let r = (angle * 12 * scale) + (idx * 4);
-            let x = Math.cos(angle * direction + time + (idx * 0.1)) * r;
-            let y = Math.sin(angle * direction + time + (idx * 0.1)) * r * 0.6;
-            
-            if (angle === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.stroke();
-        });
-        ctx.restore();
-      }
-
-      drawSwirl(centerX - 80, centerY, 1.2, 1);
-      drawSwirl(centerX + 120, centerY - 20, 0.9, -1);
-
-      starPositions.forEach(star => {
-        let x = star.x * canvas.width;
-        let y = star.y * canvas.height;
-        let pulse = Math.sin(time * 50 * star.speed) * 4;
-        let currentR = star.baseR + pulse;
-
-        ctx.save();
-        ctx.globalAlpha = 0.25;
-        ctx.strokeStyle = '#ffcc00';
-        ctx.lineWidth = 2.5;
-        for (let r = currentR + 5; r < currentR + 35; r += 8) {
-          ctx.setLineDash([4, 6]);
-          ctx.beginPath();
-          ctx.arc(x, y, r, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-        
-        let starGrad = ctx.createRadialGradient(x, y, 2, x, y, currentR);
-        starGrad.addColorStop(0, '#ffffff');
-        starGrad.addColorStop(0.3, '#ffeb3b');
-        starGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = starGrad;
-        ctx.globalAlpha = 1;
-        ctx.beginPath();
-        ctx.arc(x, y, currentR, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      });
-
-      let moonX = canvas.width * 0.85;
-      let moonY = canvas.height * 0.18;
-      let moonR = 45;
-
-      ctx.save();
-      ctx.globalAlpha = 0.15;
-      let moonHalo = ctx.createRadialGradient(moonX, moonY, moonR, moonX, moonY, moonR + 50);
-      moonHalo.addColorStop(0, '#ff9f00');
-      moonHalo.addColorStop(0.5, '#ffcc00');
-      moonHalo.addColorStop(1, 'transparent');
-      ctx.fillStyle = moonHalo;
-      ctx.beginPath();
-      ctx.arc(moonX, moonY, moonR + 50, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.globalAlpha = 1;
-      ctx.shadowColor = '#ffcc00';
-      ctx.shadowBlur = 20;
-      ctx.fillStyle = '#ffcc00';
-      ctx.beginPath();
-      ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
-      ctx.fill();
-      
-      ctx.shadowBlur = 0;
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.arc(moonX - 15, moonY - 5, moonR - 2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-
-      animationFrameId = requestAnimationFrame(drawVanGoghBackground);
-    }
-
-    drawVanGoghBackground();
-  </script>
+  // ---------- brilho e paralaxe que seguem o mouse ----------
+  const frameWrap = document.getElementById("frameWrap");
+  const sheen = document.getElementById("sheen");
+  if(!reduced){
+    frameWrap.addEventListener("mousemove", (e)=>{
+      const r = frameWrap.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      sheen.style.setProperty("--mx", (px*100).toFixed(1)+"%");
+      sheen.style.setProperty("--my", (py*100).toFixed(1)+"%");
+      const rotY = (px - .5) * 8;
+      const rotX = (.5 - py) * 8;
+      frameWrap.style.transform = `perspective(1100px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    });
+    frameWrap.addEventListener("mouseleave", ()=>{
+      frameWrap.style.transform = "perspective(1100px) rotateX(0deg) rotateY(0deg)";
+    });
+  }
+})();
+</script>
 </body>
 </html>
