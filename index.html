@@ -1,512 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Girassóis — Releitura Animada de Van Gogh</title>
-<meta name="description" content="Uma releitura animada e generativa de 'Vaso com Girassóis', de Vincent van Gogh, feita em SVG e CSS puro.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    /* ---- paleta nomeada ---- */
-    --wall-light:   #E9BA21;
-    --wall-dark:    #C9941A;
-    --table-ochre:  #B07A24;
-    --table-dark:   #8F5E18;
-    --petal-bright: #FBD23A;
-    --petal-mid:    #ECA916;
-    --petal-shadow: #C97C0E;
-    --petal-highlight: #FFEC9C;
-    --leaf-green:   #707F28;
-    --leaf-dark:    #46531B;
-    --vase-yellow:  #D9A441;
-    --vase-shadow:  #A8741F;
-    --seed-brown:   #5A3A1A;
-    --seed-dark:    #2E1C0D;
-    --frame-1:      #FFE08A;
-    --frame-2:      #B8860B;
-    --frame-3:      #5C3D0E;
-    --gallery-1:    #241512;
-    --gallery-2:    #120a08;
-    --ink:          #3a2a16;
-    --ink-soft:     #6b5a3e;
-    --paper:        #f4ead2;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Um Recado Especial para Nicolly</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Lexend:wght@400;600&display=swap');
 
-  *{ box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  html,body{
-    margin:0; padding:0; min-height:100%;
-    background:
-      radial-gradient(ellipse at 50% 15%, #3a241e 0%, transparent 60%),
-      radial-gradient(ellipse at 50% 100%, var(--gallery-2) 0%, transparent 70%),
-      linear-gradient(180deg, var(--gallery-1), var(--gallery-2));
-    background-size: 140% 140%, 140% 140%, 100% 100%;
-    animation: galleryDrift 36s ease-in-out infinite alternate;
-    font-family: 'EB Garamond', serif;
-    color: var(--paper);
-    -webkit-font-smoothing: antialiased;
-  }
+        body {
+            background: radial-gradient(circle at center, #1b365d 0%, #081125 100%);
+            font-family: 'Lexend', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-  @keyframes galleryDrift{
-    0%   { background-position: 40% 0%, 60% 100%, 0 0; }
-    100% { background-position: 60% 10%, 40% 90%, 0 0; }
-  }
+        /* Estrelas brilhantes ao fundo */
+        .stars {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #fff 1px, transparent 1px),
+                radial-gradient(circle at 75% 15%, #fff 2px, transparent 2px),
+                radial-gradient(circle at 50% 60%, #fff 1px, transparent 1px),
+                radial-gradient(circle at 85% 80%, #fff 1px, transparent 1px),
+                radial-gradient(circle at 10% 70%, #fff 2px, transparent 2px);
+            background-size: 200px 200px;
+            animation: twinkle 4s infinite linear;
+            opacity: 0.6;
+        }
 
-  .stage{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap: clamp(20px, 4vw, 40px);
-    padding: clamp(24px, 6vw, 64px) 18px 50px;
-  }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
 
-  /* ---------- moldura dourada ---------- */
-  .frame-wrap{
-    position:relative;
-    width:min(560px, 92vw);
-    padding: clamp(14px, 2.6vw, 22px);
-    border-radius: 3px;
-    background:
-      repeating-linear-gradient(135deg, rgba(0,0,0,.18) 0 2px, transparent 2px 6px),
-      linear-gradient(135deg, var(--frame-1), var(--frame-2) 38%, var(--frame-3) 68%, var(--frame-2) 100%);
-    box-shadow:
-      0 0 0 2px rgba(0,0,0,.55) inset,
-      0 0 0 9px rgba(0,0,0,.18) inset,
-      0 30px 70px -15px rgba(0,0,0,.75),
-      0 4px 10px rgba(0,0,0,.5);
-    transform-style: preserve-3d;
-    transform: perspective(1100px) rotateX(0deg) rotateY(0deg);
-    transition: transform .25s cubic-bezier(.2,.6,.3,1);
-    will-change: transform;
-  }
+        /* Balões flutuantes estilo Up - Altas Aventuras */
+        .balloon-container {
+            position: absolute;
+            bottom: -100px; width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none;
+        }
 
-  .frame-inner{
-    position:relative;
-    background:#0c0a08;
-    padding: clamp(5px, 1vw, 8px);
-    box-shadow: inset 0 0 26px rgba(0,0,0,.75);
-    overflow:hidden;
-  }
+        .balloon {
+            position: absolute;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            animation: floatUp 8s infinite ease-in-out;
+            opacity: 0.8;
+        }
 
-  svg.painting{
-    display:block;
-    width:100%;
-    height:auto;
-    background: var(--wall-light);
-    opacity:0;
-    transition: opacity .5s ease;
-  }
+        .balloon::after {
+            content: ""; position: absolute; bottom: -8px; left: 50%;
+            transform: translateX(-50%);
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 8px solid rgba(255,255,255,0.4);
+        }
 
-  /* sheen / holofote que segue o mouse, como luz batendo na tinta */
-  .sheen{
-    position:absolute; inset: clamp(5px,1vw,8px);
-    pointer-events:none;
-    background: radial-gradient(circle at var(--mx,50%) var(--my,30%),
-      rgba(255,255,255,.35), rgba(255,255,255,.08) 28%, transparent 55%);
-    mix-blend-mode: soft-light;
-    opacity:.9;
-  }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-120px) scale(1) rotate(15deg); opacity: 0; }
+        }
 
-  /* poeira / pólen flutuando à frente da tela */
-  .motes{ position:absolute; inset: clamp(5px,1vw,8px); pointer-events:none; overflow:hidden; }
-  .mote{
-    position:absolute;
-    bottom:-6%;
-    width: var(--s,4px); height: var(--s,4px);
-    border-radius:50%;
-    background: radial-gradient(circle, #fff6cf 0%, rgba(255,246,207,0) 70%);
-    opacity:0;
-    animation: floatUp var(--dur,9s) linear infinite;
-    animation-delay: var(--delay,0s);
-  }
-  @keyframes floatUp{
-    0%   { transform: translate(0,0); opacity:0; }
-    8%   { opacity:.85; }
-    90%  { opacity:.35; }
-    100% { transform: translate(var(--drift,18px), -118%); opacity:0; }
-  }
+        /* Card Mágico Translúcido */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%; max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.1);
+            position: relative; z-index: 10;
+            transform: translateY(30px); opacity: 0;
+            animation: cardAppear 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
 
-  /* ---------- flores: balanço suave, sem conflitar com posicionamento estático ---------- */
-  .flower-sway{
-    transform-origin: 0 0;
-    animation: swayBob var(--dur,6s) ease-in-out infinite alternate;
-    animation-delay: var(--swayDelay,0s);
-  }
-  @keyframes swayBob{
-    0%   { rotate: -1.4deg; translate: 0 0; }
-    50%  { rotate: .6deg;  translate: 0 -2.4px; }
-    100% { rotate: 1.6deg;  translate: 0 .6px; }
-  }
+        @keyframes cardAppear {
+            to { transform: translateY(0); opacity: 1; }
+        }
 
-  .petal{
-    opacity:0;
-    animation: petalIn .85s cubic-bezier(.2,.7,.3,1) forwards;
-    animation-delay: calc(var(--baseDelay,0s) + var(--pd,0s));
-  }
-  @keyframes petalIn{
-    from{ opacity:0; }
-    to{ opacity:1; }
-  }
+        /* Brilho neon colorido giratório nas bordas */
+        .card::before {
+            content: ''; position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            background: linear-gradient(45deg, #ff4b2b, #ff416c, #a8ff78, #78ffd6, #00c6ff, #0072ff);
+            border-radius: 35px; z-index: -1; background-size: 400%;
+            animation: magicGlow 12s linear infinite; opacity: 0.4; filter: blur(10px);
+        }
 
-  .disc-group{
-    opacity:0;
-    animation: petalIn 1s ease-out forwards;
-    animation-delay: calc(var(--baseDelay,0s) + .25s);
-  }
+        @keyframes magicGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-  .draw{ fill-opacity: 0; }
-  .draw.filled{ transition: fill-opacity .9s ease .15s; fill-opacity:1; }
+        /* Título Estilo Logo Pixar/Disney 3D */
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 45px; color: #fff;
+            text-shadow: 0 2px 0 #0056b3, 0 4px 0 #004085, 0 6px 0 #002752, 0 8px 15px rgba(0,0,0,0.6);
+            letter-spacing: 2px; margin-bottom: 25px;
+            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+            opacity: 0; transform: scale(0.7);
+        }
 
-  @media (prefers-reduced-motion: reduce){
-    .flower-sway{ animation:none !important; }
-    .petal,.disc-group{ animation:none !important; opacity:1 !important; }
-    html,body{ animation:none !important; }
-  }
+        @keyframes popIn {
+            to { opacity: 1; transform: scale(1); }
+        }
 
-  /* ---------- legenda no estilo placa de museu ---------- */
-  .placard{
-    width:min(560px, 92vw);
-    text-align:center;
-    padding: 4px 6px 0;
-  }
-  .placard .eyebrow{
-    font-family:'EB Garamond', serif;
-    font-style: italic;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    font-size: .72rem;
-    color: var(--frame-1);
-    opacity:.75;
-    margin:0 0 6px;
-  }
-  .placard h1{
-    font-family:'Playfair Display', serif;
-    font-weight:900;
-    font-style:italic;
-    font-size: clamp(2.1rem, 7vw, 3.1rem);
-    margin: 0 0 10px;
-    color: var(--paper);
-    text-shadow: 0 2px 18px rgba(236,169,22,.25);
-  }
-  .placard .meta{
-    font-size: .98rem;
-    line-height:1.5;
-    color: #d8c8a8;
-    margin: 0 0 10px;
-  }
-  .placard .meta em{ color: var(--frame-1); font-style:italic; }
-  .placard .note{
-    font-family:'Caveat', cursive;
-    font-size: 1.25rem;
-    color: #c9b287;
-    opacity:.85;
-    margin: 0;
-  }
+        /* Estilização dos Textos e Transições */
+        p {
+            font-size: 18px; line-height: 1.6; color: #f0f3f8; margin-bottom: 20px;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.8s;
+        }
 
-  noscript .ns-box{
-    width:min(560px,92vw); text-align:center; padding:40px 20px;
-    border:1px dashed var(--frame-1); border-radius:6px; color:var(--paper);
-  }
+        .highlight-miss {
+            color: #ffde6a; font-weight: 600; display: inline-block;
+            animation: pulse 2s infinite;
+        }
 
-  @media (max-width: 420px){
-    .frame-wrap{ padding:12px; }
-  }
-</style>
+        .highlight-chatice {
+            background: rgba(255, 75, 108, 0.2); border: 1px dashed #ff4b6c;
+            padding: 2px 8px; border-radius: 10px; color: #ff758f; font-style: italic;
+        }
+
+        .highlight-bless { color: #a8ff78; font-weight: 600; }
+
+        .highlight-success {
+            font-family: 'Fredoka One', cursive;
+            background: linear-gradient(to right, #78ffd6, #a8ff78);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 22px; display: inline-block; margin: 10px 0;
+        }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        /* Botão Interativo com Efeito Mágico */
+        .btn-magic {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            border: none; padding: 12px 30px; border-radius: 50px;
+            color: white; font-family: 'Fredoka One', cursive; font-size: 16px;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(255, 65, 108, 0.4);
+            transition: all 0.3s ease; margin-top: 15px;
+            opacity: 0; animation: fadeInUp 0.8s ease forwards 1.2s;
+        }
+
+        .btn-magic:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 25px rgba(255, 65, 108, 0.6);
+        }
+
+        /* Estrelinhas cintilantes da Disney */
+        .sparkle {
+            position: absolute; background: white; width: 4px; height: 4px; border-radius: 50%;
+            box-shadow: 0 0 10px 2px #fff; animation: flash 1.5s infinite alternate;
+        }
+        @keyframes flash { 0% { opacity: 0.2; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.5); } }
+    </style>
 </head>
 <body>
 
-<div class="stage">
+    <div class="stars"></div>
+    <div class="balloon-container" id="balloons"></div>
 
-  <div class="frame-wrap" id="frameWrap">
-    <div class="frame-inner">
-      <svg class="painting" id="painting" viewBox="0 0 760 980" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pintura animada de um vaso com girassóis, inspirada em Vincent van Gogh"></svg>
-      <div class="sheen" id="sheen"></div>
-      <div class="motes" id="motes"></div>
+    <div class="card">
+        <div class="sparkle" style="top: 15%; left: 10%;"></div>
+        <div class="sparkle" style="top: 80%; right: 12%; animation-delay: 0.5s;"></div>
+        <div class="sparkle" style="top: 40%; right: 5%; animation-delay: 0.8s;"></div>
+
+        <h1>Nicolly!</h1>
+        
+        <p>Estou com <span class="highlight-miss">muitas saudades</span> de você, sua <span class="highlight-chatice">chatice</span>! 🤪</p>
+        <p>Que <span class="highlight-bless">Deus te abençoe muito</span> nesta sua caminhada e na sua vida!</p>
+        <p>Desejo <span class="highlight-success">MUITO SUCESSO</span> em tudo o que fizer!</p>
+        <p style="font-weight: 600; color: #ff758f;">Te adoro viu! ✨💙</p>
+
+        <button class="btn-magic" onclick="createBurst()">Receber Abraço Mágico</button>
     </div>
-  </div>
 
-  <div class="placard">
-    <p class="eyebrow">Galeria Digital · Pós-Impressionismo</p>
-    <h1>Girassóis</h1>
-    <p class="meta">Releitura animada inspirada em <em>Vaso com Girassóis</em>, Vincent van Gogh, 1888 · pintura original a óleo sobre tela · DVCO TECH, 2026</p>
-    <p class="note">a cada recarregamento nasce um buquê levemente diferente — passe o mouse sobre a tela para sentir a luz da galeria</p>
-  </div>
+    <script>
+        // Gerador automático de Balões Flutuantes (Estilo Pixar)
+        const colors = ['#ff4b6c', '#ffbe0b', '#fb5607', '#ff006e', '#3a86ff', '#8338ec', '#06d6a0'];
+        const container = document.getElementById('balloons');
 
-  <noscript>
-    <div class="ns-box">Ative o JavaScript para ver a pintura animada dos girassóis.</div>
-  </noscript>
+        function generateBalloons() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.classList.add('balloon');
+                    const size = Math.floor(Math.random() * 30) + 20; 
+                    const left = Math.floor(Math.random() * 100);
+                    const delay = Math.random() * 5;
+                    const duration = Math.random() * 4 + 6;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
 
-</div>
+                    balloon.style.width = `${size}px`;
+                    balloon.style.height = `${size * 1.2}px`;
+                    balloon.style.left = `${left}%`;
+                    balloon.style.backgroundColor = color;
+                    balloon.style.boxShadow = `inset -5px -5px 10px rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.3)`;
+                    balloon.style.animationDelay = `${delay}s`;
+                    balloon.style.animationDuration = `${duration}s`;
+                    container.appendChild(balloon);
+                    setTimeout(() => balloon.remove(), (duration + delay) * 1000);
+                }, i * 300);
+            }
+        }
+        generateBalloons();
+        setInterval(generateBalloons, 10000);
 
-<script>
-(function(){
-  "use strict";
-  const SVGNS = "http://www.w3.org/2000/svg";
-  const svg = document.getElementById("painting");
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        // Efeito de partículas ao clicar no botão
+        function createBurst() {
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.style.position = 'absolute'; p.style.width = '8px'; p.style.height = '8px'; p.style.borderRadius = '50%';
+                p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                p.style.left = '50%'; p.style.top = '50%'; p.style.zIndex = '100'; p.style.pointerEvents = 'none';
+                
+                const angle = Math.random() * Math.PI * 2;
+                const vel = Math.random() * 150 + 50;
+                const x = Math.cos(angle) * vel; const y = Math.sin(angle) * vel;
+                document.body.appendChild(p);
 
-  function rand(a,b){ return Math.random()*(b-a)+a; }
-  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-  function el(tag, attrs, parent){
-    const e = document.createElementNS(SVGNS, tag);
-    for(const k in attrs){ e.setAttribute(k, attrs[k]); }
-    if(parent) parent.appendChild(e);
-    return e;
-  }
-
-  // ---------- defs: gradientes e textura de tela ----------
-  const defs = el("defs", {}, svg);
-
-  const wallGrad = el("linearGradient", {id:"wallGrad", x1:"0", y1:"0", x2:"0", y2:"1"}, defs);
-  el("stop", {offset:"0%", "stop-color":"var(--wall-light)"}, wallGrad);
-  el("stop", {offset:"100%", "stop-color":"var(--wall-dark)"}, wallGrad);
-
-  const tableGrad = el("linearGradient", {id:"tableGrad", x1:"0", y1:"0", x2:"0", y2:"1"}, defs);
-  el("stop", {offset:"0%", "stop-color":"var(--table-ochre)"}, tableGrad);
-  el("stop", {offset:"100%", "stop-color":"var(--table-dark)"}, tableGrad);
-
-  const vaseGrad = el("linearGradient", {id:"vaseGrad", x1:"0", y1:"0", x2:"1", y2:"0"}, defs);
-  el("stop", {offset:"0%", "stop-color":"var(--vase-shadow)"}, vaseGrad);
-  el("stop", {offset:"45%", "stop-color":"var(--vase-yellow)"}, vaseGrad);
-  el("stop", {offset:"100%", "stop-color":"var(--vase-shadow)"}, vaseGrad);
-
-  const discGrad = el("radialGradient", {id:"discGrad", cx:"38%", cy:"35%", r:"75%"}, defs);
-  el("stop", {offset:"0%", "stop-color":"var(--seed-brown)"}, discGrad);
-  el("stop", {offset:"100%", "stop-color":"var(--seed-dark)"}, discGrad);
-
-  // textura de ruído (grão de tela / impasto)
-  const filt = el("filter", {id:"grain", x:"-5%", y:"-5%", width:"110%", height:"110%"}, defs);
-  el("feTurbulence", {type:"fractalNoise", baseFrequency:"0.85", numOctaves:"2", stitchTiles:"stitch", result:"noise"}, filt);
-  el("feColorMatrix", {in:"noise", type:"matrix", values:"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"}, filt);
-
-  // ---------- fundo: parede + mesa, com pinceladas direcionais ----------
-  el("rect", {x:0,y:0,width:760,height:660,fill:"url(#wallGrad)"}, svg);
-  el("rect", {x:0,y:650,width:760,height:330,fill:"url(#tableGrad)"}, svg);
-
-  (function brushStreaks(){
-    const wallShades = ["#F2C53B","#E9BA21","#D9A920","#C9941A","#F6CE55"];
-    for(let i=0;i<46;i++){
-      const x = rand(-10,770);
-      const h = rand(120,420);
-      const y = rand(0,640-h*0.3);
-      const wob = rand(8,28);
-      const d = `M${x},${y} C${x+wob},${y+h*0.3} ${x-wob},${y+h*0.6} ${x+wob*0.4},${y+h}`;
-      el("path",{d, stroke:pick(wallShades), "stroke-width":rand(3,7), fill:"none",
-        opacity:rand(.12,.3), "stroke-linecap":"round"}, svg);
-    }
-    const tableShades = ["#C68B2A","#B07A24","#9C6A1C","#8F5E18"];
-    for(let i=0;i<26;i++){
-      const x = rand(-10,770);
-      const y = rand(660,960);
-      const len = rand(60,180);
-      const d = `M${x},${y} q${len*0.5},${rand(-10,10)} ${len},${rand(-6,6)}`;
-      el("path",{d, stroke:pick(tableShades), "stroke-width":rand(3,6), fill:"none",
-        opacity:rand(.15,.32), "stroke-linecap":"round"}, svg);
-    }
-  })();
-
-  // linha da mesa
-  el("path",{d:"M0,652 Q380,640 760,652", stroke:"#7a5012","stroke-width":3, fill:"none", opacity:.55}, svg);
-
-  // ---------- vaso ----------
-  const vaseGroup = el("g",{}, svg);
-  const vasePath = el("path",{
-    d:"M306,613 C296,646 282,668 288,702 C293,742 298,784 318,824 C330,846 432,846 444,824 \
-       C462,784 467,742 472,702 C478,668 464,646 454,613 C422,602 338,602 306,613 Z",
-    fill:"url(#vaseGrad)", stroke:"#7a5012", "stroke-width":4, class:"draw"
-  }, vaseGroup);
-
-  el("ellipse",{cx:380, cy:613, rx:74, ry:13, fill:"var(--vase-shadow)", stroke:"#7a5012","stroke-width":3}, vaseGroup);
-  el("ellipse",{cx:380, cy:611, rx:60, ry:8, fill:"#3a2410", opacity:.55}, vaseGroup);
-
-  [ -34,-10,16,40 ].forEach((off,i)=>{
-    el("path",{
-      d:`M${340+off*1.1},620 C${330+off},680 ${330+off},760 ${346+off},822`,
-      stroke: i%2? "rgba(255,255,255,.18)":"rgba(0,0,0,.18)",
-      "stroke-width": 3, fill:"none"
-    }, vaseGroup);
-  });
-
-  el("text",{x:380, y:760, "text-anchor":"middle", "font-family":"Caveat, cursive",
-    "font-size":30, fill:"#6b4513", opacity:.5, transform:"rotate(-2 380 760)"}, vaseGroup).textContent = "Vincent";
-
-  // ---------- folhas junto à boca do vaso ----------
-  const leafGroup = el("g",{}, svg);
-  function leafPath(len,w){
-    return `M0,0 C${w},${-len*0.18} ${w*1.05},${-len*0.58} 0,${-len} \
-            C${-w*0.55},${-len*0.58} ${-w*0.32},${-len*0.18} 0,0 Z`;
-  }
-  const leafSpecs = [
-    {x:316,y:606,rot:-130,s:1.05},
-    {x:380,y:602,rot:-90,s:.85},
-    {x:444,y:606,rot:-50,s:1.05},
-  ];
-  leafSpecs.forEach(L=>{
-    const g = el("g",{transform:`translate(${L.x},${L.y}) rotate(${L.rot}) scale(${L.s})`}, leafGroup);
-    el("path",{d:leafPath(70,26), fill:"var(--leaf-green)", stroke:"var(--leaf-dark)","stroke-width":2.4, class:"draw"}, g);
-    el("path",{d:`M0,-4 L0,${-66}`, stroke:"var(--leaf-dark)","stroke-width":1.6, opacity:.6}, g);
-  });
-
-  // ---------- pétalas, disco de sementes ----------
-  function petalPath(len,w){
-    const w2 = len*w;
-    return `M0,0 C${-w2},${-len*0.28} ${-w2*0.55},${-len*0.82} 0,${-len} \
-            C${w2*0.55},${-len*0.82} ${w2},${-len*0.28} 0,0 Z`;
-  }
-  function petalRing(group, count, innerR, len, w, fill, stroke, rotOffset, layerName, baseDelay){
-    for(let i=0;i<count;i++){
-      const angle = (360/count)*i + rotOffset + rand(-3,3);
-      const L = len*rand(.92,1.08);
-      const p = el("path",{
-        d: petalPath(L,w),
-        transform:`rotate(${angle}) translate(0,${-innerR})`,
-        fill, stroke, "stroke-width":1.5, "stroke-linejoin":"round",
-        class:`petal ${layerName}`
-      }, group);
-      p.style.setProperty("--pd", (rand(0,0.5)).toFixed(2)+"s");
-      p.style.setProperty("--baseDelay", baseDelay+"s");
-    }
-  }
-  function seedDisc(group, r, detailed, baseDelay){
-    const dg = el("g",{class:"disc-group"}, group);
-    dg.style.setProperty("--baseDelay", baseDelay+"s");
-    el("circle",{cx:0,cy:0,r:r, fill:"url(#discGrad)"}, dg);
-    if(detailed){
-      const n = Math.min(Math.floor(r*r*0.95), 130);
-      for(let i=0;i<n;i++){
-        const a = i*137.508*Math.PI/180;
-        const rad = 2.3*Math.sqrt(i);
-        if(rad > r-2) break;
-        const x = rad*Math.cos(a), y = rad*Math.sin(a);
-        el("circle",{cx:x.toFixed(1),cy:y.toFixed(1),r:1.1,
-          fill: i%5===0? "#3a2410":"#5a3a1a", opacity:.85}, dg);
-      }
-    } else {
-      for(let i=0;i<10;i++){
-        const a = rand(0,Math.PI*2), rad = rand(r*0.2,r*0.85);
-        el("circle",{cx:(rad*Math.cos(a)).toFixed(1), cy:(rad*Math.sin(a)).toFixed(1),
-          r:1.2, fill:"#3a2410", opacity:.7}, dg);
-      }
-    }
-    el("circle",{cx:0,cy:0,r:r, fill:"none", stroke:"#3a2410","stroke-width":2, opacity:.5}, dg);
-  }
-
-  function buildFlower(cx, cy, scale, rotation, droop, idx, detailed){
-    const baseDelay = 1.5 + idx*0.26;
-    const outer = el("g",{
-      transform:`translate(${cx},${cy}) rotate(${rotation}) scale(${scale})`
-    }, svg);
-    const sway = el("g",{class:"flower-sway"}, outer);
-    sway.style.setProperty("--dur", rand(5,8).toFixed(2)+"s");
-    sway.style.setProperty("--swayDelay", rand(0,3).toFixed(2)+"s");
-
-    const petalFill1 = droop? "#B5740E" : "var(--petal-shadow)";
-    const petalFill2 = droop? "#C98F1E" : "var(--petal-mid)";
-    const petalFill3 = droop? "#D9A93A" : "var(--petal-bright)";
-
-    petalRing(sway, 13, 18, 46, .34, petalFill1, petalFill2, rand(0,360), "outer", baseDelay);
-    petalRing(sway, 13, 14, 36, .32, petalFill2, petalFill3, rand(0,360), "mid", baseDelay);
-    petalRing(sway, 8,  9,  22, .36, petalFill3, "#FFE98A", rand(0,360), "inner", baseDelay);
-    seedDisc(sway, droop? 14:16, detailed, baseDelay);
-
-    return {cx, cy};
-  }
-
-  // ---------- disposição do buquê (fundo -> frente) ----------
-  const flowerSpecs = [
-    {cx:236, cy:472, scale:.74, rot:-34, droop:true,  detailed:false},
-    {cx:524, cy:452, scale:.72, rot:30,  droop:true,  detailed:false},
-    {cx:340, cy:568, scale:.66, rot:-22, droop:false, detailed:false},
-    {cx:432, cy:576, scale:.64, rot:20,  droop:false, detailed:false},
-    {cx:300, cy:518, scale:1.02,rot:-7,  droop:false, detailed:true},
-    {cx:462, cy:498, scale:.98, rot:9,   droop:false, detailed:true},
-    {cx:382, cy:426, scale:1.12,rot:0,   droop:false, detailed:true},
-  ];
-
-  // hastes ligando o buquê ao vaso (desenhadas ANTES das flores, para ficarem por baixo)
-  const stemGroup = el("g",{}, svg);
-  const stemAnchors = [310,346,380,414,450];
-  flowerSpecs.forEach((f,i)=>{
-    const ax = stemAnchors[i % stemAnchors.length] + rand(-6,6);
-    const ay = 612;
-    const tx = f.cx, ty = f.cy + 30*f.scale;
-    const mx = (ax+tx)/2 + rand(-22,22);
-    const my = (ay+ty)/2;
-    const d = `M${ax},${ay} Q${mx},${my} ${tx},${ty}`;
-    el("path",{d, stroke:"var(--leaf-dark)","stroke-width":7, fill:"none",
-      "stroke-linecap":"round", class:"draw"}, stemGroup);
-    el("path",{d, stroke:"var(--leaf-green)","stroke-width":2.4, fill:"none",
-      "stroke-linecap":"round", opacity:.7}, stemGroup);
-  });
-
-  // flores (desenhadas por último, para ficarem por cima das hastes)
-  flowerSpecs.forEach((f,i)=>{
-    buildFlower(f.cx,f.cy,f.scale,f.rot,f.droop,i,f.detailed);
-  });
-
-  // véu de textura por cima de tudo
-  el("rect",{x:0,y:0,width:760,height:980, filter:"url(#grain)", opacity:.5,
-    style:"mix-blend-mode:multiply; pointer-events:none;"}, svg);
-
-  // ---------- sequência de "pintura" no carregamento ----------
-  function drawIn(path, delay){
-    if(reduced){ path.style.fillOpacity = 1; return; }
-    const len = path.getTotalLength();
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
-    path.getBoundingClientRect();
-    path.style.transition = `stroke-dashoffset 1s cubic-bezier(.65,0,.35,1) ${delay}s, fill-opacity .9s ease ${delay+0.5}s`;
-    requestAnimationFrame(()=>{
-      path.style.strokeDashoffset = 0;
-      path.classList.add("filled");
-    });
-  }
-
-  drawIn(vasePath, 0);
-  Array.from(leafGroup.querySelectorAll(".draw")).forEach((p,i)=>drawIn(p, .35+i*.18));
-  Array.from(stemGroup.querySelectorAll(".draw")).forEach((p,i)=>drawIn(p, .8+i*.14));
-
-  requestAnimationFrame(()=>{ svg.style.opacity = 1; });
-
-  // ---------- poeira / pólen flutuando ----------
-  if(!reduced){
-    const motesEl = document.getElementById("motes");
-    for(let i=0;i<14;i++){
-      const m = document.createElement("div");
-      m.className = "mote";
-      m.style.left = rand(8,92)+"%";
-      m.style.setProperty("--s", rand(2,5).toFixed(1)+"px");
-      m.style.setProperty("--dur", rand(7,15).toFixed(1)+"s");
-      m.style.setProperty("--delay", rand(0,12).toFixed(1)+"s");
-      m.style.setProperty("--drift", rand(-26,26).toFixed(0)+"px");
-      motesEl.appendChild(m);
-    }
-  }
-
-  // ---------- brilho e paralaxe que seguem o mouse ----------
-  const frameWrap = document.getElementById("frameWrap");
-  const sheen = document.getElementById("sheen");
-  if(!reduced){
-    frameWrap.addEventListener("mousemove", (e)=>{
-      const r = frameWrap.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;
-      const py = (e.clientY - r.top) / r.height;
-      sheen.style.setProperty("--mx", (px*100).toFixed(1)+"%");
-      sheen.style.setProperty("--my", (py*100).toFixed(1)+"%");
-      const rotY = (px - .5) * 8;
-      const rotX = (.5 - py) * 8;
-      frameWrap.style.transform = `perspective(1100px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-    });
-    frameWrap.addEventListener("mouseleave", ()=>{
-      frameWrap.style.transform = "perspective(1100px) rotateX(0deg) rotateY(0deg)";
-    });
-  }
-})();
-</script>
+                p.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(0)`, opacity: 0 }
+                ], { duration: 1000, easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)', fill: 'forwards' });
+                setTimeout(() => p.remove(), 1000);
+            }
+        }
+    </script>
 </body>
 </html>
